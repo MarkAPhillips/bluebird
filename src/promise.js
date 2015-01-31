@@ -32,8 +32,7 @@ var isDebugging = require("./debuggability.js")(Promise, CapturedTrace);
 var createContext =
     require("./context.js")(Promise, CapturedTrace, isDebugging);
 var catchFilter = require("./catch_filter.js")();
-var PromiseResolver = require("./promise_resolver.js");
-var nodebackForPromise = PromiseResolver._nodebackForPromise;
+var nodebackForPromise = require("./nodeback.js");
 var errorObj = util.errorObj;
 var tryCatch = util.tryCatch;
 
@@ -161,11 +160,6 @@ Promise.all = function (promises) {
     var ret = new PromiseArray(promises).promise();
     ret._setIsSpreadable();
     return ret;
-};
-
-Promise.defer = Promise.pending = function () {
-    var promise = new Promise(INTERNAL);
-    return new PromiseResolver(promise);
 };
 
 Promise.cast = function (obj) {
